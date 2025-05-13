@@ -16,15 +16,21 @@
       dnf:
         name:
           - docker
-          - docker
           - containerd
         state: latest
 
     - name: Start and enable Docker service
       systemd:
-        name: docker
+        name: docker.service
         enabled: yes
         state: started
+
+    - name: Start and enable Containerd service
+      systemd:
+        name: containerd.service
+        enabled: yes
+        state: started
+
 
     - name: Add current user to docker group
       user:
