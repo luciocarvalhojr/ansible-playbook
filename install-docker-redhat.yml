@@ -5,7 +5,7 @@
 
   tasks:
     - name: Install required packages
-      yum:
+      dnf:
         name:
           - yum-utils
           - device-mapper-persistent-data
@@ -13,10 +13,11 @@
         state: present
 
     - name: Install Docker packages
-      yum:
+      dnf:
         name:
           - docker
-          - contaninerd
+          - docker
+          - containerd
         state: latest
 
     - name: Start and enable Docker service
