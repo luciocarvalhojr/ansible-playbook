@@ -24,17 +24,19 @@
         name: docker.service
         enabled: yes
         state: started
+      ignore_errors: true
 
     - name: Start and enable Containerd service
       systemd:
         name: containerd.service
         enabled: yes
         state: started
+      ignore_errors: true
 
 
     - name: Add current user to docker group
       user:
-        name: "{{ ansible_user }}"
+        name: ec2-user
         groups: docker
         append: yes
 
