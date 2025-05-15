@@ -15,6 +15,7 @@
     - name: Install Docker packages
       dnf:
         name:
+          - htop
           - docker
           - containerd
         state: latest
