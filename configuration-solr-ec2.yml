@@ -1,0 +1,24 @@
+---
+- name: Run a Docker container with parameters
+  hosts: all
+  become: true
+  vars:
+    container_image: "{{ ECR_IMAGE }}"
+    solr_opts: "{{ SOLR_OPTS }}"
+    solr_java_mem: "{{ SOLR_JAVA_MEM }}"
+
+  tasks:
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: "{{ docker_image }}"
+        source: pull
+
+    - name: Run Docker container with env vars
+      community.docker.docker_container:
+        name: solr
+        image: "{{ container_image }}"
+        env:
+          SOLR_OPTS: "{{ solr_opts }}"
+          SOLR_JAVA_MEM: "{{ solr_java_mem }}"
+        state: started
+        restart_policy: unless-stopped
