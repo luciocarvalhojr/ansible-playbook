@@ -1,0 +1,81 @@
+---
+- name: Configure EC2 instance for ECS with EBS volume
+  hosts: all
+  become: yes
+
+  vars:
+    ecs_cluster_name: "{{ ecs_cluster_name }}"
+    ecs_instance_attributes: '{"solrinstance":"true"}'
+    ebs_device_name: "/dev/xvdf"
+    ebs_mount_point: "/mnt/data"
+
+  tasks:
+
+    - name: Update all packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install required packages
+      yum:
+        name:
+          - aws-cli
+          - docker
+          - ecs-init
+        state: present
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Configure ECS cluster name
+      lineinfile:
+        path: /etc/ecs/ecs.config
+        line: "ECS_CLUSTER={{ ecs_cluster_name }}"
+        create: yes
+
+    - name: Set ECS instance attributes
+      lineinfile:
+        path: /etc/ecs/ecs.config
+        line: "ECS_INSTANCE_ATTRIBUTES={{ ecs_instance_attributes }}"
+
+    - name: Enable and start ECS service
+      systemd:
+        name: ecs
+        enabled: yes
+        state: started
+
+    - name: Create mount point
+      file:
+        path: "{{ ebs_mount_point }}"
+        state: directory
+        mode: '0755'
+
+    - name: Check if EBS volume is already formatted
+      command: "blkid {{ ebs_device_name }}"
+      register: blkid_output
+      ignore_errors: true
+
+    - name: Format EBS volume if not formatted
+      filesystem:
+        fstype: ext4
+        dev: "{{ ebs_device_name }}"
+      when: blkid_output.rc != 0
+
+    - name: Mount the EBS volume
+      mount:
+        path: "{{ ebs_mount_point }}"
+        src: "{{ ebs_device_name }}"
+        fstype: ext4
+        opts: defaults,nofail
+        state: mounted
+
+    - name: Ensure mount is persisted in fstab
+      mount:
+        path: "{{ ebs_mount_point }}"
+        src: "{{ ebs_device_name }}"
+        fstype: ext4
+        opts: defaults,nofail
+        state: present
