@@ -1,6 +1,6 @@
 - name: Get Container Image from SSM
   set_fact:
-    docker_image: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/DOCKER_IMAGE', region='ca-central-1'), }}"
+    docker_image: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/DOCKER_IMAGE', region='ca-central-1') }}"
 
 - name: Get Solr Options from SSM
   set_fact:
