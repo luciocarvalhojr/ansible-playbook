@@ -38,9 +38,18 @@
     group: 8983
     recurse: 
     
+- name: Get EC2 instance metadata
+  amazon.aws.ec2_metadata_facts:
+    retries: 10
+    delay: 10
+
+- name: Set region AWS
+  set_fact:
+    aws_region: "{{ ansible_ec2_placement_region }}"
+
 - name: Login to Amazon ECR
-  amazon.aws.ecr_login:
-    region: "{{ aws_region }}"
+  ansible.builtin.command: >
+    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ aws_compte_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com
 
 - name: Pull Docker image
   community.docker.docker_image:

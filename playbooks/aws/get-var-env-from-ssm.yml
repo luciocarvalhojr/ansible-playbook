@@ -9,3 +9,7 @@
 - name: Get Solr JAVA Memory from SSM
   set_fact:
     solr_java_mem: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/SOLR_JAVA_MEM', region='ca-central-1') }}"
+
+- name: Get AWS Account ID from SSM
+  set_fact:
+    aws_compte_id: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/AWS_COMPTE_ID', region='ca-central-1') }}"

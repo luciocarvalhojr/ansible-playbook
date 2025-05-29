@@ -7,7 +7,6 @@
   become: true
 
   vars:
-    aws_region: ca-central-1
     region: ca-central-1
     device_name: /dev/xvdf
     volume_tag_name: "true"
