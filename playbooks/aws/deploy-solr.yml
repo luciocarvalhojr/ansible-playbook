@@ -36,7 +36,11 @@
     path: /mnt/data
     owner: 8983
     group: 8983
-    recurse: true
+    recurse: 
+    
+- name: Log in to Amazon ECR
+  amazon.aws.ecr_login:
+  region: "{{ aws_region }}"
 
 - name: Pull Docker image
   community.docker.docker_image:
