@@ -9,9 +9,9 @@
 
   vars:
     region: ca-central-1
-    device_name: /dev/xvdg
+    device_name: /dev/xvdf
     volume_tag_name: "true"
-    ebs_mount_point: /mnt/data2
+    ebs_mount_point: /mnt/data
     ebs_device_name: "{{ device_name }}"
     docker_image: "solr:latest"
 
