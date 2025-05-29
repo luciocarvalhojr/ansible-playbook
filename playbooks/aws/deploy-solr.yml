@@ -38,9 +38,9 @@
     group: 8983
     recurse: 
     
-- name: Log in to Amazon ECR
+- name: Login to Amazon ECR
   amazon.aws.ecr_login:
-  region: "{{ aws_region }}"
+    region: "{{ aws_region }}"
 
 - name: Pull Docker image
   community.docker.docker_image:
