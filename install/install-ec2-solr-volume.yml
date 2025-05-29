@@ -39,7 +39,6 @@
         state: started
       ignore_errors: true
 
-
     - name: Add current user to docker group
       user:
         name: ec2-user
