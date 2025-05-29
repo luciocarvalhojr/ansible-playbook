@@ -1,7 +1,6 @@
 ---
 - name: Attach and mount EBS volume with setup
   hosts: all
-  #hosts: i-0f76776b9ba41a172
   gather_facts: false
   collections:
     - amazon.aws
@@ -12,12 +11,11 @@
     device_name: /dev/xvdf
     volume_tag_name: "true"
     ebs_mount_point: /mnt/data
-    ebs_device_name: "{{ device_name }}"
     #docker_image: "solr:latest"
-    docker_image: "{{ docker_image }}"
 
   pre_tasks: 
     - import_tasks: aws/install-ansible-collection-amazon.yml
+    - import_tasks: aws/get-var-env-from-ssm.yml
     - import_tasks: aws/auto-attach-ec2-ebs.yml
 
   tasks:

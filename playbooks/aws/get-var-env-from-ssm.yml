@@ -1,0 +1,11 @@
+- name: Get Container Image from SSM
+  set_fact:
+    docker_image: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/DOCKER_IMAGE_URI') }}"
+
+- name: Get Solr Options from SSM
+  set_fact:
+    solr_opts: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/SOLR_OPTS') }}"
+
+- name: Get Solr JAVA Memory from SSM
+  set_fact:
+    solr_java_mem: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/JAVA_MEM') }}"
