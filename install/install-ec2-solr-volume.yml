@@ -92,6 +92,13 @@
         fstype: ext4
         opts: defaults,nofail
         state: present
+    
+    - name: Change owner and group of /mnt/data
+      file:
+        path: /mnt/data
+        owner: 8983
+        group: 8983
+        recurse: true
 
     - name: Pull Docker image
       community.docker.docker_image:
