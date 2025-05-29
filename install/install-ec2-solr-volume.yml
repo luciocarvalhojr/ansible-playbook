@@ -1,0 +1,89 @@
+---
+- name: Install Docker and Docker Compose on RHEL
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install required packages
+      dnf:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+
+    - name: Install Docker packages
+      dnf:
+        name:
+          - htop
+          - docker
+          - containerd
+        state: latest
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker.service
+        enabled: yes
+        state: started
+      ignore_errors: true
+
+    - name: Start and enable Containerd service
+      systemd:
+        name: containerd.service
+        enabled: yes
+        state: started
+      ignore_errors: true
+
+
+    - name: Add current user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Download Docker Compose binary
+      get_url:
+        url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: Verify Docker Compose installation
+      command: docker-compose --version
+      register: docker_compose_version
+
+    - name: Show Docker Compose version
+      debug:
+        var: docker_compose_version.stdout
+
+    - name: Create mount point
+      file:
+        path: "{{ ebs_mount_point }}"
+        state: directory
+        mode: '0755'
+
+    - name: Check if EBS volume is already formatted
+      command: "blkid {{ ebs_device_name }}"
+      register: blkid_output
+      ignore_errors: true
+
+    - name: Format EBS volume if not formatted
+      filesystem:
+        fstype: ext4
+        dev: "{{ ebs_device_name }}"
+      when: blkid_output.rc != 0
+
+    - name: Mount the EBS volume
+      mount:
+        path: "{{ ebs_mount_point }}"
+        src: "{{ ebs_device_name }}"
+        fstype: ext4
+        opts: defaults,nofail
+        state: mounted
+
+    - name: Ensure mount is persisted in fstab
+      mount:
+        path: "{{ ebs_mount_point }}"
+        src: "{{ ebs_device_name }}"
+        fstype: ext4
+        opts: defaults,nofail
+        state: present
