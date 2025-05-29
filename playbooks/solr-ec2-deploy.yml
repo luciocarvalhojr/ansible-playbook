@@ -13,7 +13,8 @@
     volume_tag_name: "true"
     ebs_mount_point: /mnt/data
     ebs_device_name: "{{ device_name }}"
-    docker_image: "solr:latest"
+    #docker_image: "solr:latest"
+    docker_image: "{{ docker_image }}"
 
   pre_tasks: 
     - import_tasks: aws/install-ansible-collection-amazon.yml
