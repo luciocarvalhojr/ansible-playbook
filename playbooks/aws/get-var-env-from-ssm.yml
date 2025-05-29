@@ -8,4 +8,4 @@
 
 - name: Get Solr JAVA Memory from SSM
   set_fact:
-    solr_java_mem: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/JAVA_MEM') }}"
+    solr_java_mem: "{{ lookup('amazon.aws.aws_ssm', '/Solr/env/SOLR_JAVA_MEM') }}"
