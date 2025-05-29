@@ -49,9 +49,12 @@
 
 - name: Login to Amazon ECR
   ansible.builtin.command: >
-    aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 177078417298.dkr.ecr.ca-central-1.amazonaws.com
-  
-  #aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ aws_compte_id }}.dkr.ecr.{{ aws_region }}.amazonaws.com
+    aws ecr get-login-password --region {{ aws_region }} 
+  register: ecr_login
+
+- name: Login to ECR using Docker
+  ansible.builtin.command: >
+    docker login --username AWS --password {{ ecr_login.stdout }} 177078417298.dkr.ecr.{{ aws_region }}.amazonaws.com
 
 - name: Pull Docker image
   community.docker.docker_image:
