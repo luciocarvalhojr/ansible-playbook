@@ -40,7 +40,9 @@
     register: vol_check
     retries: 10
     delay: 5
-    until: vol_check.volumes[0].attachment_set[0].status == 'attached'
+    until: >
+      vol_check.volumes[0].attachment_set | length > 0 and
+      vol_check.volumes[0].attachment_set[0].status == 'attached'
 
   - name: Debug success
     debug:
