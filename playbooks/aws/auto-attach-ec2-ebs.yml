@@ -1,6 +1,6 @@
   - name: Get EC2 instance metadata
     amazon.aws.ec2_metadata_facts:
-      metadata_token_ttl_seconds: 240
+      #metadata_token_ttl_seconds: 240
 
   - name: Set instance ID fact
     set_fact:
