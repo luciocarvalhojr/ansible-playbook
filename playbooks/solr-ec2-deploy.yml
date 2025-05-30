@@ -1,5 +1,5 @@
 ---
-- name: Attach and mount EBS volume with setup
+- name: Deploy Solr on EC2 with EBS Volume
   hosts: all
   gather_facts: false
   collections:

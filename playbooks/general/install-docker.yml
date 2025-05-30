@@ -14,6 +14,21 @@
       - containerd
     state: latest
 
+- name: Configure Docker log rotation
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "50m",
+          "max-file": "3"
+        }
+      }
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Start and enable Docker service
   systemd:
     name: docker.service
