@@ -12,7 +12,7 @@
     amazon.aws.ec2_vol_info:
       region: "{{ region }}"
       filters:
-        "tag:Name": "{{ volume_tag_name }}"
+        "tag:solrdata": "{{ volume_tag_name }}"
     register: ec2_vol_info
 
   - name: Fail if volume not found
