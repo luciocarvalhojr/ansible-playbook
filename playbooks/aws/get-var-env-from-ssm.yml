@@ -16,4 +16,4 @@
 
 - name: Get AWS Account ID from SSM
   set_fact:
-    aws_account_id: "{{ lookup('amazon.aws.aws_ssm', ssm ~ '/AWS_ACCOUNT', region=region) }}"
+    aws_account_id: "{{ lookup('amazon.aws.aws_ssm', ssm_prefix ~ '/AWS_ACCOUNT', region=region) }}"
